@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#MISE description="Run plugin tests - install and execute tool"
+set -euo pipefail
+
+mise plugin link --force blade .
+mise cache clear
+mise install blade@latest
+mise use blade@latest
+
+output=$(mise exec "blade@latest" -- blade version)
+echo "blade output: $output"
+
+if [ -z "$output" ]; then
+    echo "✗ Test failed: no output from blade version"
+    exit 1
+fi
+
+echo "✓ Tests passed"
